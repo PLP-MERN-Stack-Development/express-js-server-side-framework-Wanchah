@@ -1,0 +1,61 @@
+[
+  {
+    "id": "1",
+    "name": "Calculator",
+    "description": "Basic scientific calculator",
+    "price": 4,
+    "category": "Tools",
+    "inStock": false
+  },
+  {
+    "id": "345f2907-6260-4328-bf5e-1366b9b79cc8",
+    "name": "Notebook",
+    "description": "Ruled notebook",
+    "price": 3.5,
+    "category": "Stationery",
+    "inStock": true
+  },
+  {
+    "id": "56eea839-bd55-4081-9c1d-98daf82ea250"
+  },
+  {
+    "id": "a3dfd9c5-6bc9-484d-9340-63dff967339b",
+    "name": "Notebook",
+    "description": "Ruled notebook",
+    "price": 3.5,
+    "category": "Stationery",
+    "inStock": true
+  },
+  {
+    "id": "4e9957ef-c9e1-4b4b-a3eb-3c55d59b6c44",
+    "name": "Notebook",
+    "description": "Ruled notebook",
+    "price": 3.5,
+    "category": "Stationery",
+    "inStock": true
+  },
+  {
+    "id": "4d2c3bbd-4309-45b3-b620-952073c1d0fd",
+    "name": "Notebook",
+    "description": "Ruled notebook",
+    "price": 3.5,
+    "category": "Stationery",
+    "inStock": true
+  },
+  {
+    "id": "notebook-001",
+    "name": "Notebook",
+    "description": "Ruled notebook",
+    "price": 3.5,
+    "category": "Stationery",
+    "inStock": true
+  },
+  {
+    "id": "notebook-001",
+    "name": "Notebook",
+    "description": "Ruled notebook",
+    "price": 3.5,
+    "category": "Stationery",
+    "inStock": true
+  }
+]

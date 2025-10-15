@@ -40,10 +40,29 @@ let products = [
   }
 ];
 
-// Root route
+// Root route - simple welcome message while API lives under /api/products
 app.get('/', (req, res) => {
-  res.send('Welcome to the Product API! Go to /api/products to see all products.');
+  res.send('Welcome to the Product API! Use /api/products for the JSON endpoints.');
 });
+
+// Helper to read/write products.json (file-backed persistence)
+const fs = require('fs').promises;
+const path = require('path');
+const dataFile = path.join(__dirname, 'data', 'products.json');
+
+async function readProducts() {
+  try {
+    const raw = await fs.readFile(dataFile, 'utf8');
+    return JSON.parse(raw || '[]');
+  } catch (err) {
+    // If file doesn't exist or is invalid, return empty array
+    return [];
+  }
+}
+
+async function writeProducts(products) {
+  await fs.writeFile(dataFile, JSON.stringify(products, null, 2), 'utf8');
+}
 
 // TODO: Implement the following routes:
 // GET /api/products - Get all products
@@ -52,9 +71,79 @@ app.get('/', (req, res) => {
 // PUT /api/products/:id - Update a product
 // DELETE /api/products/:id - Delete a product
 
-// Example route implementation for GET /api/products
-app.get('/api/products', (req, res) => {
-  res.json(products);
+// GET /api/products - list with optional category, page, limit
+app.get('/api/products', async (req, res) => {
+  try {
+    const { category } = req.query;
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 10;
+    let productsList = await readProducts();
+    if (category) {
+      productsList = productsList.filter(p => String(p.category).toLowerCase() === String(category).toLowerCase());
+    }
+    const start = (page - 1) * limit;
+    res.json(productsList.slice(start, start + limit));
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// GET /api/products/:id
+app.get('/api/products/:id', async (req, res) => {
+  try {
+    const productsList = await readProducts();
+    const product = productsList.find(p => p.id === req.params.id);
+    if (!product) return res.status(404).json({ error: 'Product not found' });
+    res.json(product);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// POST /api/products
+app.post('/api/products', async (req, res) => {
+  try {
+    const productsList = await readProducts();
+    const newProduct = { id: uuidv4(), ...req.body };
+    productsList.push(newProduct);
+    await writeProducts(productsList);
+    res.status(201).json(newProduct);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// PUT /api/products/:id
+app.put('/api/products/:id', async (req, res) => {
+  try {
+    const productsList = await readProducts();
+    const idx = productsList.findIndex(p => p.id === req.params.id);
+    if (idx === -1) return res.status(404).json({ error: 'Product not found' });
+    productsList[idx] = { ...productsList[idx], ...req.body };
+    await writeProducts(productsList);
+    res.json(productsList[idx]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// DELETE /api/products/:id
+app.delete('/api/products/:id', async (req, res) => {
+  try {
+    const productsList = await readProducts();
+    const idx = productsList.findIndex(p => p.id === req.params.id);
+    if (idx === -1) return res.status(404).json({ error: 'Product not found' });
+    productsList.splice(idx, 1);
+    await writeProducts(productsList);
+    res.status(204).end();
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
 // TODO: Implement custom middleware for:

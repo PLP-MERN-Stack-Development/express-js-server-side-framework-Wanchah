@@ -1,62 +1,162 @@
-# Express.js RESTful API Assignment
 
-This assignment focuses on building a RESTful API using Express.js, implementing proper routing, middleware, and error handling.
+# Math API — Express.js CRUD Server
 
-## Assignment Overview
+Simple Express.js REST API for a `products` resource. This README explains how to run the server and documents the API endpoints with example requests and responses.
 
-You will:
-1. Set up an Express.js server
-2. Create RESTful API routes for a product resource
-3. Implement custom middleware for logging, authentication, and validation
-4. Add comprehensive error handling
-5. Develop advanced features like filtering, pagination, and search
+---
 
-## Getting Started
+## 🧰 Prerequisites
 
-1. Accept the GitHub Classroom assignment invitation
-2. Clone your personal repository that was created by GitHub Classroom
-3. Install dependencies:
-   ```
-   npm install
-   ```
-4. Run the server:
-   ```
-   npm start
-   ```
+- Node.js v18+ (recommended)
+- npm
 
-## Files Included
+---
 
-- `Week2-Assignment.md`: Detailed assignment instructions
-- `server.js`: Starter Express.js server file
-- `.env.example`: Example environment variables file
+## 📦 Install
 
-## Requirements
+```powershell
+npm install
+```
 
-- Node.js (v18 or higher)
-- npm or yarn
-- Postman, Insomnia, or curl for API testing
+---
 
-## API Endpoints
+## ⚙️ Environment Setup
 
-The API will have the following endpoints:
+Copy `.env.example` to `.env` and set your values. At minimum, set the API key:
 
-- `GET /api/products`: Get all products
-- `GET /api/products/:id`: Get a specific product
-- `POST /api/products`: Create a new product
-- `PUT /api/products/:id`: Update a product
-- `DELETE /api/products/:id`: Delete a product
+```properties
+PORT=3000
+API_KEY=your_api_key_here
+```
 
-## Submission
+> ⚠️ Do not commit your `.env` file. Ensure `.env` is listed in `.gitignore`.
 
-Your work will be automatically submitted when you push to your GitHub Classroom repository. Make sure to:
+---
 
-1. Complete all the required API endpoints
-2. Implement the middleware and error handling
-3. Document your API in the README.md
-4. Include examples of requests and responses
+## 🚀 Run the Server
 
-## Resources
+Start normally:
 
-- [Express.js Documentation](https://expressjs.com/)
-- [RESTful API Design Best Practices](https://restfulapi.net/)
-- [HTTP Status Codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) 
+```powershell
+npm start
+```
+
+Start in watch mode (auto-restart on changes):
+
+```powershell
+npm run dev
+```
+
+By default, the server listens on the port from `.env` or `3000`.
+
+---
+
+## 🔐 Authentication
+
+All requests must include the following header:
+
+```text
+Authorization: Bearer YOUR_API_KEY
+```
+
+Replace `YOUR_API_KEY` with the value from your `.env` file.
+
+---
+
+## 📦 API Endpoints
+
+### Base URL
+
+```
+http://localhost:3000/api/products
+```
+
+---
+
+## 🧾 Usage via CMD (Windows)
+
+Use the following commands in Windows CMD to interact with the API. Replace `PRODUCT_ID` with the actual product ID (e.g., `1` or a UUID).
+
+```cmd
+:: Get all products
+curl -H "Authorization: Bearer YOUR_API_KEY" http://localhost:3000/api/products
+
+:: Get a single product by ID
+curl -H "Authorization: Bearer YOUR_API_KEY" http://localhost:3000/api/products/PRODUCT_ID
+
+:: Create a new product
+curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer YOUR_API_KEY" -d "{\"name\":\"Notebook\",\"description\":\"Ruled notebook\",\"price\":3.50,\"category\":\"Stationery\",\"inStock\":true}" http://localhost:3000/api/products
+
+:: Update an existing product
+curl -X PUT -H "Content-Type: application/json" -H "Authorization: Bearer YOUR_API_KEY" -d "{\"price\":4.00,\"inStock\":false}" http://localhost:3000/api/products/PRODUCT_ID
+
+:: Delete a product by ID
+curl -X DELETE -H "Authorization: Bearer YOUR_API_KEY" http://localhost:3000/api/products/PRODUCT_ID
+```
+
+---
+
+## 📘 Notes
+
+- These commands are designed for **Windows CMD only**.
+- Ensure your server is running and accessible at `http://localhost:3000`.
+- All endpoints require a valid bearer token.
+- JSON payloads must be properly escaped using `\"` inside CMD.
+
+---
+
+## 🧪 Example Product Object
+
+```json
+{
+  "name": "Notebook",
+  "description": "Ruled notebook",
+  "price": 3.5,
+  "category": "Stationery",
+  "inStock": true
+}
+```
+
+---
+
+## 📂 Project Structure
+
+The repository follows the simple Express assignment layout used in this project. Files and folders you should see:
+
+```
+package.json
+README.md
+server.js
+.env.example
+
+controllers/
+  └── productsController.js
+
+routes/
+  └── products.js
+
+data/
+  └── products.json
+
+middleware/
+  ├── auth.js
+  ├── errorHandler.js
+  ├── logger.js
+  └── validateProduct.js
+
+utils/
+  ├── errors.js
+  └── dataStore.js
+
+scripts/
+  └── smoke-test.cmd
+```
+
+If your repo differs (e.g., renamed folders or removed `scripts/`), update this list to match your filesystem.
+
+---
+
+## 🧑‍💻 Author
+
+Built and maintained by Wanchah.
+```

@@ -1,0 +1,6 @@
+# common dotenv files
+.envfile
+# common dotenv files
+.env
+.env.local
+.env.*.local
